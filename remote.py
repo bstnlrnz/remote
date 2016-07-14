@@ -1,4 +1,3 @@
-
 import pexpect
 import sys
 import getpass
@@ -22,7 +21,7 @@ def connect(src, usr, cmd):
     elif i==1:
          print("End of File")
     elif i==2:
-         print("Connection timed out....")
+         sys.exit("Connection timed out....")
 
 # Main
 
@@ -40,9 +39,9 @@ elif len(sys.argv) == 4:
         usr=sys.argv[2]
         cmd=sys.argv[3]
     except:
-        sys.exit("Missing Arguments - Usage: <IP> <UserName> <\"Command\">")
+        sys.exit("Error - Usage: <IP> <UserName> <\"Command\">")
 else:
-    sys.exit("Missing Arguments - Usage: <IP> <UserName> <\"Command\">")
+    sys.exit("Error - Usage: <IP> <UserName> <\"Command\">")
 
 # Funktion aufrufen
 connect(src, usr, cmd)
