@@ -1,28 +1,21 @@
+
 import pexpect
 import sys
 import getpass
 
-#Parameter abfragen
-
-print ("Host IP-Address:"),
-src =raw_input()
-print("User:"),
-usr=raw_input()
-print("Command:"),
-cmd=raw_input()
-
-# SSH Verbindung herstellen
+# Funktion: SSH Verbindung herstellen
 def connect(src, usr, cmd):
     connStr="ssh " + usr + "@" + src
     child=pexpect.spawn(connStr)
+    #Warten auf Shell-Prompt
     i=child.expect(['~\$', pexpect.EOF, pexpect.TIMEOUT])
     if i==0:
          child.sendline(cmd)
          h=child.expect(['~\$', 'password'])
          if h==0:
-            print ("Output:"),child.before
+            print ("#####################Output:#####################"), child.before
          elif h==1:
-            pw = getpass.getpass("Need sudo password, please give me...:")
+            pw = getpass.getpass("Need sudo password, please type in...:")
             child.sendline(pw)
             child.expect('~\$')
             print child.before
@@ -32,4 +25,24 @@ def connect(src, usr, cmd):
          print("Connection timed out....")
 
 # Main
+
+# Parameter abfragen
+if len(sys.argv) < 2:
+    print ("Host IP-Address:"),
+    src =raw_input()
+    print("User:"),
+    usr=raw_input()
+    print("Command:"),
+    cmd=raw_input()
+elif len(sys.argv) == 4:
+    try:
+        src=sys.argv[1]
+        usr=sys.argv[2]
+        cmd=sys.argv[3]
+    except:
+        sys.exit("Missing Arguments - Usage: <IP> <UserName> <\"Command\">")
+else:
+    sys.exit("Missing Arguments - Usage: <IP> <UserName> <\"Command\">")
+
+# Funktion aufrufen
 connect(src, usr, cmd)
